@@ -52,7 +52,6 @@ namespace iDroneExemplos
 		
 		void Processamento(Image<Bgr, Byte> Img)
 		{
-			
 			//determina parametros de controlo, por processamento de imagem, para o tipo de controlo: Segue Objecto que utiliza a câmara 1(frente do drone) 
 			if(checkBox2.Checked)
 				Segue_Objecto_CAM1(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked, Convert.ToDouble(Area.Text));
@@ -279,6 +278,24 @@ namespace iDroneExemplos
 		}
 		
 		#endregion
+
+        private void mission4_Click(object sender, EventArgs e)
+        {
+
+
+
+
+
+
+
+
+
+
+
+            pictureBox1.Image = Img.Bitmap;
+            pictureBox2.Image = img1.Bitmap;
+
+        }
 		
 		
 		

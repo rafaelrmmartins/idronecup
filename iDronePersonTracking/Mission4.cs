@@ -14,7 +14,14 @@ namespace iDroneExemplos
 {
     public partial class MainForm : Form
     {
-        
+        const int m4_area_obj = 1;
+        const int m4_hsv_hlow = 1;
+        const int m4_hsv_hhi = 1;
+        const int m4_hsv_vlow = 1;
+        const int m4_hsv_vhi = 1;
+        const int m4_hsv_slow = 1;
+        const int m4_hsv_shi = 1;
+
         void mission4_Click(object sender, EventArgs e)
         {
             // TODO: verificar ligacao, etc
@@ -24,8 +31,8 @@ namespace iDroneExemplos
             mDrone.droneDescolar();
 
             do
-            {
-                mDrone.droneMoverPRO(0f, 0f, -1f, 0f);
+            {       // TODO: verificar vZ ? neg as docs : pos as logic
+                mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
 
                 EstadoDrone();
 
@@ -33,7 +40,7 @@ namespace iDroneExemplos
 
             do
             {
-                mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
+                mDrone.droneMoverPRO(0f, 0f, -1f, 0f);
 
                 EstadoDrone();
                                                   // TODO: testar possibilidade de reconhecer area a esta altura
@@ -57,18 +64,24 @@ namespace iDroneExemplos
                 // TODO: better way to check HUE, SAT and VAL
                 // TODO: select HSV parameters for mission 4
 
-                img1 = ProImg.HsvROI(ImageFrame, HUE_L, HUE_H, SAT_L, SAT_H, VAL_L, VAL_H, HUE, SAT, VAL, INV);
+                img1 = ProImg.HsvROI(ImageFrame, m4_hsv_hlow, m4_hsv_hhi, m4_hsv_slow, m4_hsv_shi, m4_hsv_vlow, m4_hsv_vhi, true, true, true, true);
 
                 img1 = img1.SmoothGaussian(9);
 
                 // TODO: select area parameter for mission 4 : function of height?
 
-                ProImg.Deteccao_Circulo(img1, ImageFrame, area_obje_desej);
+                ProImg.Deteccao_Circulo(img1, ImageFrame, (m4_area_obj*mDrone.droneObterAltitude()));
 
+                //mapping de frente para baixo
+                // vZ passa a representar vX, 
+                
                 droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, area_obje_desej);
+                droneTraj.ObjectTracking2();
 
 
-                mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
+
+
+                mDrone.droneMoverPRO(0f, 0f, 0f, 0f);
 
                 if (mDrone.droneObterAltitude() < 0.01f)
                     break;

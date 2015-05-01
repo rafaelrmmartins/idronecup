@@ -14,17 +14,30 @@ namespace iDroneExemplos
 {
     public partial class MainForm : Form
     {
-        // TODO: verificar ligacao, etc
+        
         void mission4_Click(object sender, EventArgs e)
         {
+            // TODO: verificar ligacao, etc
+
+            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
+
             mDrone.droneDescolar();
 
             do
             {
-                mDrone.droneMoverPRO(0f, 0f, -1f, 0);
+                mDrone.droneMoverPRO(0f, 0f, -1f, 0f);
+
+                EstadoDrone();
+
             } while (mDrone.droneObterAltitude() < 3.0f);
 
-            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
+            do
+            {
+                mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
+
+                EstadoDrone();
+                                                  // TODO: testar possibilidade de reconhecer area a esta altura
+            } while (mDrone.droneObterAltitude() > 1.5f);
 
             while (true)
             {
@@ -42,34 +55,38 @@ namespace iDroneExemplos
                 imgsize.Y = ImageFrame.Height;
 
                 // TODO: better way to check HUE, SAT and VAL
+                // TODO: select HSV parameters for mission 4
 
                 img1 = ProImg.HsvROI(ImageFrame, HUE_L, HUE_H, SAT_L, SAT_H, VAL_L, VAL_H, HUE, SAT, VAL, INV);
 
                 img1 = img1.SmoothGaussian(9);
 
-                ProImg.Deteccao_Circulo(img1, Img, area_obje_desej);
+                // TODO: select area parameter for mission 4 : function of height?
+
+                ProImg.Deteccao_Circulo(img1, ImageFrame, area_obje_desej);
 
                 droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, area_obje_desej);
 
 
+                mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
 
-
-
+                if (mDrone.droneObterAltitude() < 0.01f)
+                    break;
 
                 pictureBox1.Image = ImageFrame.Bitmap;
                 pictureBox2.Image = img1.Bitmap;
 
                 EstadoDrone();
-
             }
+
+            mDrone.droneAterrar();
+
+            return;
         }
 
         void atualizarImagemOnly(object sender, droneImageChangeEventArgs data)
         {
             ImageFrame.Bitmap = data.droneImagem;
         }
-
-
-
     }
 }

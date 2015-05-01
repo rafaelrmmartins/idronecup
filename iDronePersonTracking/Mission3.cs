@@ -22,9 +22,9 @@ namespace iDroneExemplos
             if (mDrone.droneObterAltitude() == 0)
             {
                 mDrone.droneDescolar();
-               while (i<3){
+               while (i<30){
                    i++;
-                   mDrone.droneAvancar(1);
+                   mDrone.droneAvancar(0.2f);
                }
             }
 

@@ -56,8 +56,6 @@ namespace iDroneExemplos
                         break;
                 }
 
-                //void Centra_Circulo_CAM1(Image<Bgr, Byte> Img, int HUE_L, int HUE_H, int SAT_L, int SAT_H, int VAL_L, int VAL_H,bool HUE, bool SAT, bool VAL, bool INV, double area_obje_desej)
-
                 imgsize.X = ImageFrame.Width;
                 imgsize.Y = ImageFrame.Height;
 
@@ -72,30 +70,37 @@ namespace iDroneExemplos
 
                 ProImg.Deteccao_Circulo(img1, ImageFrame, (m4_area_obj*mDrone.droneObterAltitude()));
 
-                //mapping de frente para baixo
-                // vZ passa a representar vX, 
-                
-                droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, area_obje_desej);
-                droneTraj.ObjectTracking2();
+                droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
+
+                mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0.01f, droneTraj.Vel_rot_z_drone);
 
 
-
-
-                mDrone.droneMoverPRO(0f, 0f, 0f, 0f);
+                //refresh form
+                pictureBox1.Image = ImageFrame.Bitmap;
+                pictureBox2.Image = img1.Bitmap;
+                EstadoDrone();
 
                 if (mDrone.droneObterAltitude() < 0.01f)
                     break;
-
-                pictureBox1.Image = ImageFrame.Bitmap;
-                pictureBox2.Image = img1.Bitmap;
-
-                EstadoDrone();
             }
 
+            resetDroneTrajVal();
+            mDrone.droneMoverPRO(0, 0, 0, 0);
             mDrone.droneAterrar();
 
             return;
         }
+
+        void resetDroneTrajVal()
+        {
+            droneTraj.Vel_rot_z_drone = 0;
+            droneTraj.Vel_x_drone= 0;
+            droneTraj.Vel_y_drone= 0;
+            droneTraj.Vel_z_drone = 0;
+
+            return;
+        }
+
 
         void atualizarImagemOnly(object sender, droneImageChangeEventArgs data)
         {

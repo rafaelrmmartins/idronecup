@@ -30,7 +30,7 @@ namespace iDroneExemplos
 
             mDrone.droneDescolar();
 
-            do
+            /*do
             {       // TODO: verificar vZ ? neg as docs : pos as logic
                 mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
 
@@ -44,7 +44,7 @@ namespace iDroneExemplos
 
                 EstadoDrone();
                                                   // TODO: testar possibilidade de reconhecer area a esta altura
-            } while (mDrone.droneObterAltitude() > 1.5f);
+            } while (mDrone.droneObterAltitude() > 1.5f);*/
 
             while (true)
             {

@@ -189,6 +189,7 @@ namespace iDroneExemplos
 		{
 			mDrone = new iDroneCup.Drone();
 			mDrone.droneLigar();
+            mDrone.iDroneCup_ChangeWifiChannel(Convert.ToInt32(wifi_channel.Text));
 			mDrone.droneResetEmergencia();
 		}
 		

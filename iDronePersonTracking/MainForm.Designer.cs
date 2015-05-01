@@ -76,6 +76,7 @@ namespace iDroneExemplos
             this.H = new System.Windows.Forms.CheckBox();
             this.Mission4 = new System.Windows.Forms.Button();
             this.Mission1 = new System.Windows.Forms.Button();
+            this.wifi_channel = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -482,11 +483,20 @@ namespace iDroneExemplos
             this.Mission1.UseVisualStyleBackColor = true;
             this.Mission1.Click += new System.EventHandler(this.Mission1_Click);
             // 
+            // wifi_channel
+            // 
+            this.wifi_channel.Location = new System.Drawing.Point(487, 628);
+            this.wifi_channel.Name = "wifi_channel";
+            this.wifi_channel.Size = new System.Drawing.Size(44, 20);
+            this.wifi_channel.TabIndex = 12;
+            this.wifi_channel.Text = "2300";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1020, 655);
+            this.Controls.Add(this.wifi_channel);
             this.Controls.Add(this.Mission1);
             this.Controls.Add(this.Mission4);
             this.Controls.Add(this.groupBox4);
@@ -515,6 +525,7 @@ namespace iDroneExemplos
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		private System.Windows.Forms.CheckBox checkBox7;
@@ -556,6 +567,7 @@ namespace iDroneExemplos
 		private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button Mission4;
         private System.Windows.Forms.Button Mission1;
+        private System.Windows.Forms.TextBox wifi_channel;
 		
 		
 	}

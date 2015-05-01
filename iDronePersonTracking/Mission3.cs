@@ -16,14 +16,24 @@ namespace iDroneExemplos
 
         void Button15Click(object sender, System.EventArgs e)
         {
+            int i = 0;
             //Connects and starts drone
-            mDrone.droneLigar();
-            mDrone.iDroneCup_ChangeWifiChannel(2);
+            //mDrone.droneLigar();
             if (mDrone.droneObterAltitude() == 0)
+            {
                 mDrone.droneDescolar();
+               while (i<3){
+                   i++;
+                   mDrone.droneAvancar(1);
+               }
+            }
+
             //changes camera
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
-
+            do {
+                //mDrone.imageChange += new Drone.droneImageHandler(atualizarImagem);
+                //mDrone.droneAvancar(0.3f);
+            }while(true);
 
 
         }

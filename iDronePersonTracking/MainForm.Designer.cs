@@ -77,6 +77,7 @@ namespace iDroneExemplos
             this.Mission4 = new System.Windows.Forms.Button();
             this.Mission1 = new System.Windows.Forms.Button();
             this.wifi_channel = new System.Windows.Forms.TextBox();
+            this.button15 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -491,11 +492,22 @@ namespace iDroneExemplos
             this.wifi_channel.TabIndex = 12;
             this.wifi_channel.Text = "2300";
             // 
+            // button15
+            // 
+            this.button15.Location = new System.Drawing.Point(490, 511);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(41, 26);
+            this.button15.TabIndex = 27;
+            this.button15.Text = "M3";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.Button15Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1020, 655);
+            this.Controls.Add(this.button15);
             this.Controls.Add(this.wifi_channel);
             this.Controls.Add(this.Mission1);
             this.Controls.Add(this.Mission4);
@@ -568,6 +580,7 @@ namespace iDroneExemplos
         private System.Windows.Forms.Button Mission4;
         private System.Windows.Forms.Button Mission1;
         private System.Windows.Forms.TextBox wifi_channel;
+        private System.Windows.Forms.Button button15;
 		
 		
 	}

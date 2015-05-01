@@ -276,5 +276,7 @@ namespace iDroneExemplos
 		#endregion
 
 
+        void Button15Click();
+
 	}
 }

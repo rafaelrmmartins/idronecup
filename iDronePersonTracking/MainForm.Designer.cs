@@ -75,6 +75,7 @@ namespace iDroneExemplos
             this.S = new System.Windows.Forms.CheckBox();
             this.H = new System.Windows.Forms.CheckBox();
             this.Mission4 = new System.Windows.Forms.Button();
+            this.Mission1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -463,7 +464,7 @@ namespace iDroneExemplos
             // 
             // Mission4
             // 
-            this.Mission4.Location = new System.Drawing.Point(490, 448);
+            this.Mission4.Location = new System.Drawing.Point(490, 479);
             this.Mission4.Name = "Mission4";
             this.Mission4.Size = new System.Drawing.Size(41, 26);
             this.Mission4.TabIndex = 8;
@@ -471,11 +472,22 @@ namespace iDroneExemplos
             this.Mission4.UseVisualStyleBackColor = true;
             this.Mission4.Click += new System.EventHandler(this.mission4_Click);
             // 
+            // Mission1
+            // 
+            this.Mission1.Location = new System.Drawing.Point(490, 448);
+            this.Mission1.Name = "Mission1";
+            this.Mission1.Size = new System.Drawing.Size(41, 26);
+            this.Mission1.TabIndex = 26;
+            this.Mission1.Text = "M1";
+            this.Mission1.UseVisualStyleBackColor = true;
+            this.Mission1.Click += new System.EventHandler(this.Mission1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1020, 655);
+            this.Controls.Add(this.Mission1);
             this.Controls.Add(this.Mission4);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.pictureBox4);
@@ -543,6 +555,7 @@ namespace iDroneExemplos
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button Mission4;
+        private System.Windows.Forms.Button Mission1;
 		
 		
 	}

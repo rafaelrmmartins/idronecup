@@ -44,12 +44,10 @@ namespace iDroneExemplos
 			ImageFrame.Bitmap = data.droneImagem;
 						
 			if(ImageFrame.Bitmap!=null)
-				Processamento(ImageFrame);		
-
-				
+				Processamento(ImageFrame);				
 		}
-		
-		
+
+        
 		void Processamento(Image<Bgr, Byte> Img)
 		{
 			//determina parametros de controlo, por processamento de imagem, para o tipo de controlo: Segue Objecto que utiliza a câmara 1(frente do drone) 
@@ -184,9 +182,6 @@ namespace iDroneExemplos
 			pictureBox4.Image = imgdata.Bitmap;
 		}
 		
-		
-		
-		
 		//Controlos
 		#region
 		
@@ -279,25 +274,6 @@ namespace iDroneExemplos
 		
 		#endregion
 
-        private void mission4_Click(object sender, EventArgs e)
-        {
 
-
-
-
-
-
-
-
-
-
-
-            pictureBox1.Image = Img.Bitmap;
-            pictureBox2.Image = img1.Bitmap;
-
-        }
-		
-		
-		
 	}
 }

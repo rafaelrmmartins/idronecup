@@ -4,6 +4,10 @@
  * Date: 22/11/2013
  * Time: 17:17
  * 
+ * Edited by Rafael Martins
+ * iDroneCup Competition 2015
+ * FEUP team "Black4HawkDown" 
+ * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
@@ -53,12 +57,7 @@ namespace iDroneExemplos
 		void Processamento(Image<Bgr, Byte> Img)
 		{
 			
-			//determina parametros de controlo, por processamento de imagem, para o tipo de controlo: Segue Objecto que utiliza a câmara 1(frente do drone) 
-			if(checkBox2.Checked)
-				Segue_Objecto_CAM1(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked, Convert.ToDouble(Area.Text));
-			
-			if(checkBox3.Checked)
-				Segue_Objecto_CAM2(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked);
+			//determina parametros de controlo, por processamento de imagem, para o tipo de controlo: Segue Objecto que utiliza a câmara 1(frente do drone)
 			
 			if(checkBox4.Checked)
 				Centra_Linha_CAM2(Img);
@@ -94,31 +93,7 @@ namespace iDroneExemplos
 						
 		}
 		
-		void Segue_Objecto_CAM1(Image<Bgr, Byte> Img, int HUE_L, int HUE_H, int SAT_L, int SAT_H, int VAL_L, int VAL_H,bool HUE, bool SAT, bool VAL, bool INV, double area_obje_desej)
-		{
-			imgsize.X=Img.Width;
-			imgsize.Y=Img.Height;
-						
-			img1=ProImg.HsvROI(Img,HUE_L,HUE_H,SAT_L,SAT_H,VAL_L,VAL_H,HUE,SAT,VAL,INV);
-			
-			ProImg.Deteccao_Rectangulo(img1,Img,area_obje_desej);
-			
-			droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, area_obje_desej);
-			
-		}
 		
-		void Segue_Objecto_CAM2(Image<Bgr, Byte> Img, int HUE_L, int HUE_H, int SAT_L, int SAT_H, int VAL_L, int VAL_H,bool HUE, bool SAT, bool VAL, bool INV)
-		{
-			imgsize.X=Img.Width;
-			imgsize.Y=Img.Height;
-						
-			img1=ProImg.HsvROI(Img,HUE_L,HUE_H,SAT_L,SAT_H,VAL_L,VAL_H,HUE,SAT,VAL,INV);
-			
-			ProImg.Deteccao_Rectangulo(img1,Img,300);
-			
-			droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
-	
-		}
 		
 		void Centra_Linha_CAM2(Image<Bgr, Byte> Img)
 		{
@@ -272,12 +247,11 @@ namespace iDroneExemplos
 			checkBox2.Checked=false;
 			checkBox3.Checked=false;
 		}
-		
-		void Button10Click(object sender, EventArgs e)
-		{
-			mDrone.droneResetEmergencia();
-		}
-		
+
+        void Button10Click(object sender, EventArgs e)
+        {
+            mDrone.droneResetEmergencia();
+        }
 		#endregion
 		
 		

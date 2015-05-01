@@ -34,13 +34,15 @@ namespace iDroneExemplos
 
             mDrone.droneDescolar();
 
-            /*do
-            {       // TODO: verificar vZ ? neg as docs : pos as logic
+            do
+            {
                 mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
 
                 EstadoDrone();
 
-            } while (mDrone.droneObterAltitude() < 3.0f);
+            } while (mDrone.droneObterAltitude() < 2.0f);
+
+            resetDroneTrajVal();
 
             do
             {
@@ -48,11 +50,14 @@ namespace iDroneExemplos
 
                 EstadoDrone();
                                                   // TODO: testar possibilidade de reconhecer area a esta altura
-            } while (mDrone.droneObterAltitude() > 1.5f);*/
+            } while (mDrone.droneObterAltitude() > 2f);
+
+            resetDroneTrajVal();
 
             while (true)
             {
-                while (true)
+
+                while (true) //get new image
                 {
                     mDrone.imageChange += new Drone.droneImageHandler(atualizarImagemOnly);
 
@@ -60,13 +65,11 @@ namespace iDroneExemplos
                         break;
                 }
 
-                //void Centra_Circulo_CAM1(Image<Bgr, Byte> Img, int HUE_L, int HUE_H, int SAT_L, int SAT_H, int VAL_L, int VAL_H,bool HUE, bool SAT, bool VAL, bool INV, double area_obje_desej)
-
                 imgsize.X = ImageFrame.Width;
                 imgsize.Y = ImageFrame.Height;
 
                 // TODO: better way to check HUE, SAT and VAL
-                // TODO: select HSV parameters for mission 4
+                // TODO: select HSV parameters for mission 4 CHECK
 
                 img1 = ProImg.HsvROI(ImageFrame, m4_hsv_hlow, m4_hsv_hhi, m4_hsv_slow, m4_hsv_shi, m4_hsv_vlow, m4_hsv_vhi, m4_hsv_h, m4_hsv_s, m4_hsv_v, m4_hsv_invert);
 
@@ -74,16 +77,16 @@ namespace iDroneExemplos
 
                 // TODO: select area parameter for mission 4 : function of height?
 
-                ProImg.Deteccao_Circulo(img1, ImageFrame, (m4_area_obj*mDrone.droneObterAltitude()));
+                ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
 
                 //mapping de frente para baixo
                 // vZ passa a representar vX, 
                 
                 droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
  
-                mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0.01f, droneTraj.Vel_rot_z_drone);
+                mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.25f, droneTraj.Vel_rot_z_drone);
  
-                if (mDrone.droneObterAltitude() < 0.01f)
+                if (mDrone.droneObterAltitude() < 0.25f)
                     break;
  
                     //refresh form
@@ -92,12 +95,11 @@ namespace iDroneExemplos
 
                 EstadoDrone();
 
-                if (mDrone.droneObterAltitude() < 0.01f)
+                if (mDrone.droneObterAltitude() < 0.25f)
                     break;
             }
  
-            resetDroneTrajVal();
-            mDrone.droneMoverPRO(0, 0, 0, 0);
+            resetDroneTrajVal();            
             mDrone.droneAterrar();
  
             return;

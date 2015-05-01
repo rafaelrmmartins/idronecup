@@ -13,10 +13,6 @@ namespace iDroneExemplos
 {
     public partial class MainForm : Form
     {
-        public void Mission3()
-        {
-            
-        }
 
         void Button15Click(object sender, System.EventArgs e)
         {

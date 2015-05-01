@@ -72,6 +72,9 @@
     <Compile Include="Mission1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Mission2.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Mission3.cs">
       <SubType>Form</SubType>
     </Compile>

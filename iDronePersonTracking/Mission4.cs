@@ -15,12 +15,16 @@ namespace iDroneExemplos
     public partial class MainForm : Form
     {
         const int m4_area_obj = 1;
-        const int m4_hsv_hlow = 1;
-        const int m4_hsv_hhi = 1;
-        const int m4_hsv_vlow = 1;
-        const int m4_hsv_vhi = 1;
-        const int m4_hsv_slow = 1;
-        const int m4_hsv_shi = 1;
+        const int m4_hsv_hlow = 0;
+        const int m4_hsv_hhi = 123;
+        const int m4_hsv_vlow = 109;
+        const int m4_hsv_vhi = 255;
+        const int m4_hsv_slow = 79;
+        const int m4_hsv_shi = 166;
+        const bool m4_hsv_h = true;
+        const bool m4_hsv_s = true;
+        const bool m4_hsv_v = true;
+        const bool m4_hsv_invert = true;
 
         void mission4_Click(object sender, EventArgs e)
         {
@@ -64,7 +68,7 @@ namespace iDroneExemplos
                 // TODO: better way to check HUE, SAT and VAL
                 // TODO: select HSV parameters for mission 4
 
-                img1 = ProImg.HsvROI(ImageFrame, m4_hsv_hlow, m4_hsv_hhi, m4_hsv_slow, m4_hsv_shi, m4_hsv_vlow, m4_hsv_vhi, true, true, true, true);
+                img1 = ProImg.HsvROI(ImageFrame, m4_hsv_hlow, m4_hsv_hhi, m4_hsv_slow, m4_hsv_shi, m4_hsv_vlow, m4_hsv_vhi, m4_hsv_h, m4_hsv_s, m4_hsv_v, m4_hsv_invert);
 
                 img1 = img1.SmoothGaussian(9);
 

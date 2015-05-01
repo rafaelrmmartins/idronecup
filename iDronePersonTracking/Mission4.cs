@@ -107,4 +107,7 @@ namespace iDroneExemplos
             ImageFrame.Bitmap = data.droneImagem;
         }
     }
+
+    //teste commit push via vs
+
 }

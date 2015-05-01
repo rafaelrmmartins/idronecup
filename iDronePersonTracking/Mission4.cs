@@ -75,24 +75,36 @@ namespace iDroneExemplos
                 //mapping de frente para baixo
                 // vZ passa a representar vX, 
                 
-                droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, area_obje_desej);
-                droneTraj.ObjectTracking2();
-
-
-
-
-                mDrone.droneMoverPRO(0f, 0f, 0f, 0f);
-
+                droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
+ 
+                mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0.01f, droneTraj.Vel_rot_z_drone);
+ 
                 if (mDrone.droneObterAltitude() < 0.01f)
                     break;
-
+ 
+                    //refresh form
                 pictureBox1.Image = ImageFrame.Bitmap;
                 pictureBox2.Image = img1.Bitmap;
 
                 EstadoDrone();
-            }
 
+                if (mDrone.droneObterAltitude() < 0.01f)
+                    break;
+            }
+ 
+            resetDroneTrajVal();
+            mDrone.droneMoverPRO(0, 0, 0, 0);
             mDrone.droneAterrar();
+ 
+            return;
+        }
+ 
+        void resetDroneTrajVal()
+        {
+            droneTraj.Vel_rot_z_drone = 0;
+            droneTraj.Vel_x_drone= 0;
+            droneTraj.Vel_y_drone= 0;
+            droneTraj.Vel_z_drone = 0;
 
             return;
         }
@@ -102,7 +114,5 @@ namespace iDroneExemplos
             ImageFrame.Bitmap = data.droneImagem;
         }
     }
-
-    //teste commit push via vs
 
 }

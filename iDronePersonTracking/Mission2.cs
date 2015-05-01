@@ -18,8 +18,8 @@ namespace iDroneExemplos
 
             //teste
 
-
-
+            // wsdq
+            s
 
 
         }

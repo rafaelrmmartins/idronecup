@@ -77,7 +77,7 @@ namespace iDroneExemplos
             this.Mission4 = new System.Windows.Forms.Button();
             this.Mission1 = new System.Windows.Forms.Button();
             this.wifi_channel = new System.Windows.Forms.TextBox();
-            this.button15 = new System.Windows.Forms.Button();
+            this.Mission3 = new System.Windows.Forms.Button();
             this.Mission2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -467,12 +467,13 @@ namespace iDroneExemplos
             // 
             // Mission4
             // 
-            this.Mission4.Location = new System.Drawing.Point(490, 479);
+            this.Mission4.BackColor = System.Drawing.SystemColors.Highlight;
+            this.Mission4.Location = new System.Drawing.Point(490, 544);
             this.Mission4.Name = "Mission4";
             this.Mission4.Size = new System.Drawing.Size(41, 26);
             this.Mission4.TabIndex = 8;
             this.Mission4.Text = "M4";
-            this.Mission4.UseVisualStyleBackColor = true;
+            this.Mission4.UseVisualStyleBackColor = false;
             this.Mission4.Click += new System.EventHandler(this.mission4_Click);
             // 
             // Mission1
@@ -493,19 +494,20 @@ namespace iDroneExemplos
             this.wifi_channel.TabIndex = 12;
             this.wifi_channel.Text = "2";
             // 
-            // button15
+            // Mission3
             // 
-            this.button15.Location = new System.Drawing.Point(490, 511);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(41, 26);
-            this.button15.TabIndex = 27;
-            this.button15.Text = "M3";
-            this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.Button15Click);
+            this.Mission3.BackColor = System.Drawing.SystemColors.Highlight;
+            this.Mission3.Location = new System.Drawing.Point(490, 512);
+            this.Mission3.Name = "Mission3";
+            this.Mission3.Size = new System.Drawing.Size(41, 26);
+            this.Mission3.TabIndex = 27;
+            this.Mission3.Text = "M3";
+            this.Mission3.UseVisualStyleBackColor = false;
+            this.Mission3.Click += new System.EventHandler(this.Mission3);
             // 
             // Mission2
             // 
-            this.Mission2.Location = new System.Drawing.Point(490, 543);
+            this.Mission2.Location = new System.Drawing.Point(490, 480);
             this.Mission2.Name = "Mission2";
             this.Mission2.Size = new System.Drawing.Size(41, 26);
             this.Mission2.TabIndex = 28;
@@ -519,7 +521,7 @@ namespace iDroneExemplos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1020, 655);
             this.Controls.Add(this.Mission2);
-            this.Controls.Add(this.button15);
+            this.Controls.Add(this.Mission3);
             this.Controls.Add(this.wifi_channel);
             this.Controls.Add(this.Mission1);
             this.Controls.Add(this.Mission4);
@@ -592,7 +594,7 @@ namespace iDroneExemplos
         private System.Windows.Forms.Button Mission4;
         private System.Windows.Forms.Button Mission1;
         private System.Windows.Forms.TextBox wifi_channel;
-        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button Mission3;
         private System.Windows.Forms.Button Mission2;
 		
 		

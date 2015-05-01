@@ -14,7 +14,7 @@ namespace iDroneExemplos
     public partial class MainForm : Form
     {
 
-        void Button15Click(object sender, System.EventArgs e)
+        void Mission3(object sender, System.EventArgs e)
         {
             int i = 0;
             //Connects and starts drone

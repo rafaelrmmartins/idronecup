@@ -18,6 +18,7 @@ namespace iDronePersonTracking
 {
     class droneTracker
     {
+        /*
         private bool forwardMovement;
         private bool backwardMovement;
         private bool leftMovement;
@@ -40,6 +41,6 @@ namespace iDronePersonTracking
         void followToPoint(Point target, Point imgsize)
         {
             //TODO
-        }
+        }*/
     }
 }

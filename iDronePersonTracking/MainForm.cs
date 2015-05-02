@@ -35,8 +35,8 @@ namespace iDroneExemplos
 		DroneTrajectoria droneTraj= new DroneTrajectoria();
         int state_m4 = 0;
         int state_m3 = 0;
-        //int state_m2 = 0;
-        //int state_m1 = 0;
+        int state_m2 = 0;
+        int state_m1 = 0;
         int mission = 0; 
         int i = 0;
 		
@@ -335,10 +335,138 @@ namespace iDroneExemplos
             }
             #endregion
 
-			//mostra imagens
+            //mision1
+            #region
+            else if (mission == 1)
+            {
+                if (state_m1 == 0)
+                {
+                    i++;
+
+                    if (i > 50)
+                    { 
+                        mDrone.droneDescolar();
+                        i = 0;
+                        state_m1 = 1;
+                    }
+                }
+                if (state_m1 == 1)
+                {
+                    mDrone.droneSubir(0.75f);
+
+                    if (mDrone.droneObterAltitude() >1.30f)
+                    {
+                        state_m1 = 2;
+                    }
+                }
+
+                if (state_m1 == 2)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, 0, 0, 0, 0, 0, 60, false, false, true, false);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    // TODO: select area parameter for mission 4 : function of height?
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(0.1f, droneTraj.Vel_y_drone, 0f, 0f);
+
+
+                    if (ProImg.Obj_centroid.X == -1 && ProImg.Obj_centroid.Y == -1)
+                    {
+                        state_m3 = 1;
+                        resetDroneTrajVal();
+                    }
+
+                }
+                if (state_m3 == 1)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.Deteccao_Linha(ImageFrame);
+
+                    droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
+
+                    mDrone.droneMoverPRO(0.10f, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
+
+                    //condiçao de final percurso
+
+                    img2 = ProImg2.HsvROI(ImageFrame, 0, 0, 0, 0, 0, 66, false, false, true, false);
+
+                    img2 = img2.SmoothGaussian(9);
+
+                    // TODO: select area parameter for mission 4 : function of height?
+
+                    ProImg2.Deteccao_Circulo(img2, ImageFrame, 100);
+
+                    //if ((ProImg2.Obj_centroid.X != -1) && (ProImg2.Obj_centroid.Y != -1))
+                    //{
+                    //    state_m3 = 2;
+                    //    resetDroneTrajVal();
+                    //}
+                    //if ((ProImg.Obj_centroid.X == -1) && (ProImg.Obj_centroid.Y == -1))
+                    //{
+                    //    state_m3 = 10;
+                    //    resetDroneTrajVal();
+                    //}
+                }
+                if (state_m3 == 10)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.Deteccao_Linha(ImageFrame);
+
+                    droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
+
+                    mDrone.droneMoverPRO(-0.15f, 0f, 0f, 0f);
+
+                    //condiçao de voltou ao percurso
+
+                    if ((ProImg.Obj_centroid.X != -1) && (ProImg.Obj_centroid.Y != -1))
+                    {
+                        state_m3 = 1;
+                        resetDroneTrajVal();
+                    }
+                }
+                if (state_m3 == 2)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, 0, 0, 0, 0, 0, 60, false, false, true, false);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    // TODO: select area parameter for mission 4 : function of height?
+                    //TODO: aterragem!!!!
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
+
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
+                    {
+                        state_m3 = 0;
+                        mission = 0;
+                        resetDroneTrajVal();
+                        mDrone.droneAterrar();
+                    }
+                }//fim
+            }
+            #endregion
+
+            //mostra imagens
 			pictureBox1.Image=Img.Bitmap;
 			pictureBox2.Image=img1.Bitmap;
 
+            #region
             //activa tipo de controlo seleccionado no drone
             //if (checkBox5.Checked && checkBox2.Checked)
             //    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, 0, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
@@ -358,8 +486,8 @@ namespace iDroneExemplos
             //    else
             //        mDrone.droneMoverPRO(-0.02f, droneTraj.Vel_y_drone, 0, 0);
             //}
-			
-			//mostra na interface o estado de algumas variaveis do drone
+            #endregion
+            //mostra na interface o estado de algumas variaveis do drone
 			
             EstadoDrone();			
 		}
@@ -578,20 +706,24 @@ namespace iDroneExemplos
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
             Button6Click(sender, e);
             //mDrone.iDroneCup_Hover();
-            mission = 4;
-            state_m4 = 0;
+            mission = 3;
+            state_m3 = 0;
         }
 
         void mission2_Click(object sender, System.EventArgs e)
         {
+            mDrone.droneMudarCamara(Drone.DroneCamera.FRONTAL);
             mDrone.droneDescolar();
             mission = 2;
+            state_m2 = 0;
         }
 
         void mission1_Click(object sender, System.EventArgs e)
         {
-            mDrone.droneDescolar();
+            mDrone.droneCalibrar();
             mission = 1;
+            state_m1 = 0;
+            i = 0;
         }
 
         void resetDroneTrajVal()

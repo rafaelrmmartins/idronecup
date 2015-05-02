@@ -36,7 +36,6 @@ namespace iDroneExemplos
             mDrone.droneDescolar();
             mDrone.dronePairar();
 
-
             do
             {
                 mDrone.droneMoverPRO(0f, 0f, 1f, 0f);
@@ -82,15 +81,13 @@ namespace iDroneExemplos
 
                 ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
 
-                //mapping de frente para baixo
-                // vZ passa a representar vX, 
-                
                 droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
+
+                if (mDrone.droneObterAltitude() > 1.50f)
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.25f, droneTraj.Vel_rot_z_drone);
  
-                mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.25f, droneTraj.Vel_rot_z_drone);
- 
-                if (mDrone.droneObterAltitude() < 0.25f)
-                    break;
+                if (mDrone.droneObterAltitude() < 1.50f)
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.25f, droneTraj.Vel_rot_z_drone); ;
  
                     //refresh form
                 pictureBox1.Image = ImageFrame.Bitmap;
@@ -98,8 +95,13 @@ namespace iDroneExemplos
 
                 EstadoDrone();
 
-                if (mDrone.droneObterAltitude() < 0.25f)
+                //if (mDrone.droneObterAltitude() < 0.25f)
+                //    break;
+                if ((Math.Abs(ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && (Math.Abs(ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5))
+                {
+                    mDrone.dronePairar();
                     break;
+                }
             }
  
             resetDroneTrajVal();            

@@ -193,7 +193,7 @@ namespace iDroneExemplos
 
                     // TODO: select area parameter for mission 4 : function of height?
 
-                    ProImg.Deteccao_Circulo(img1, ImageFrame, m3_area_obj);
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
 
                     //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
                     mDrone.droneMoverPRO(0.5f, 0f, 0f, 0f);
@@ -271,41 +271,15 @@ namespace iDroneExemplos
                     ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
 
                     //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
-                    mDrone.droneMoverPRO(0.5f, 0f, 0f, 0f);
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
 
-                    if (mDrone.droneObterAltitude() < 1.50f)
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
                     {
-                        state_m3 = 3;
+                        state_m3 = 0;
+                        mission = 0;
                         resetDroneTrajVal();
+                        mDrone.droneAterrar();
                     }
-                }
-                if (state_m3 == 3)
-                {
-                    imgsize.X = ImageFrame.Width;
-                    imgsize.Y = ImageFrame.Height;
-
-                    img1 = ProImg.HsvROI(ImageFrame, m3_hsv_hlow, m3_hsv_hhi, m3_hsv_slow, m3_hsv_shi, m3_hsv_vlow, m3_hsv_vhi, m3_hsv_h, m3_hsv_s, m3_hsv_v, m3_hsv_invert);
-
-                    img1 = img1.SmoothGaussian(9);
-
-                    ProImg.Deteccao_Circulo(img1, ImageFrame, (m3_area_obj + 6000));
-
-                    droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
-
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0, droneTraj.Vel_rot_z_drone);
-
-                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 3) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 3) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -3) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -3))
-                    {
-                        state_m3 = 4;
-                        resetDroneTrajVal();
-                    }
-                }
-                if (state_m3 == 4)
-                {
-                    mDrone.droneAterrar();
-                    resetDroneTrajVal();
-                    state_m3 = 0;
-                    mission = 0;
                 }//fim
                 #endregion
             }

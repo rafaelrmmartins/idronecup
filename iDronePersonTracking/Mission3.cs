@@ -26,7 +26,7 @@ namespace iDroneExemplos
 
                 EstadoDrone();
 
-            } while(mDrone.droneObterAltitude()<0.50f);
+            } while(mDrone.droneObterAltitude()<0.75f);
 
             resetDroneTrajVal();
 
@@ -51,16 +51,7 @@ namespace iDroneExemplos
                 img1 = ProImg.Deteccao_Linha(ImageFrame);
 
                 droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
-
-                img1 = ProImg.HsvROI(ImageFrame, m4_hsv_hlow, m4_hsv_hhi, m4_hsv_slow, m4_hsv_shi, m4_hsv_vlow, m4_hsv_vhi, m4_hsv_h, m4_hsv_s, m4_hsv_v, m4_hsv_invert);
-
-                img1 = img1.SmoothGaussian(9);
-
-                // TODO: select area parameter for mission 4 : function of height?
-
-                ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
-
-
+                
                 //outputs
 
                 mDrone.droneMoverPRO(0.25f, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
@@ -71,8 +62,65 @@ namespace iDroneExemplos
 
                 EstadoDrone();
 
+                //condiçao de final percurso
+
+                img1 = ProImg.HsvROI(ImageFrame, 0, 0, 0, 0, 0, 66, false, false, true, false);
+
+                img1 = img1.SmoothGaussian(9);
+
+                // TODO: select area parameter for mission 4 : function of height?
+
+                ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                if ((ProImg.Obj_centroid.X == -1) || (ProImg.Obj_centroid.Y == -1))
+                {
+                    resetDroneTrajVal();
+                    break;
+                }
+
+            }
+            while(true) //aterragem
+            {
+                while (true) //get new image
+                {
+                    mDrone.imageChange += new Drone.droneImageHandler(atualizarImagemOnly);
+
+                    if (ImageFrame.Bitmap != null)
+                        break;
+                }
+
+                imgsize.X = ImageFrame.Width;
+                imgsize.Y = ImageFrame.Height;
+
+                // TODO: better way to check HUE, SAT and VAL
+                img1 = ProImg.HsvROI(ImageFrame, 0, 0, 0, 0, 0, 66, false, false, true, false);
+
+                img1 = img1.SmoothGaussian(9);
+
+                // TODO: select area parameter for mission 4 : function of height?
+
+                ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+                
+                droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
+ 
+                //output
+                mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
+
+                //refresh form
+                pictureBox1.Image = ImageFrame.Bitmap;
+                pictureBox2.Image = img1.Bitmap;
+
+                EstadoDrone();
+
+                //break out
+                if ((Math.Abs(ProImg.Obj_centroid.X - (imgsize.X/2)) < 10) && (Math.Abs(ProImg.Obj_centroid.Y - (imgsize.Y/2)) < 10))
+                    break;
             }
 
+            resetDroneTrajVal();
+            mDrone.droneAterrar();
+
+            return;
         }
 
     }

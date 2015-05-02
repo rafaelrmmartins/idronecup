@@ -32,7 +32,10 @@ namespace iDroneExemplos
 
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
 
+            resetDroneTrajVal();
             mDrone.droneDescolar();
+            mDrone.dronePairar();
+
 
             do
             {

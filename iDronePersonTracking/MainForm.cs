@@ -77,17 +77,18 @@ namespace iDroneExemplos
             {
                 if (state_m4 == 0)
                 {
-                    i++;
+                    if (i > 15)
+                        mDrone.iDroneCup_Hover();
 
-                    mDrone.iDroneCup_Hover();
+                    i++;
 
                     if (i == 30)
                     {
-                        state_m4 = 111;
+                        state_m4 = 1;
                         i = 0;
                     }
                 }
-                if (state_m4 == 11)
+                if (state_m4 == 1)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;
@@ -103,17 +104,16 @@ namespace iDroneExemplos
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
                     //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
-                    mDrone.droneMoverPRO(0f, 0f, 0.5f, 0f); 
+                    mDrone.droneMoverPRO(0f, 0f, 1f, 0f); 
 
 
-                    if (mDrone.droneObterAltitude() > 3.5f)
+                    if (mDrone.droneObterAltitude() > 3.1f)
                     {
-                        state_m4 = 1;
+                        state_m4 = 2;
                         resetDroneTrajVal();
                     }
-
                 }
-                if (state_m4 == 1)
+                if (state_m4 == 2)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;
@@ -186,11 +186,6 @@ namespace iDroneExemplos
             }//fim
             #endregion
 
-            else if (mission == 2)
-            {
-
-            }
-
             //mission3
             #region
             else if (mission == 3)
@@ -203,18 +198,18 @@ namespace iDroneExemplos
                     //else
                     //    mDrone.droneMoverPRO(-0.1f, 0.1f, 0f, 0f);
 
-                    if (i!=0)
+                    if (i>15)
                         mDrone.iDroneCup_Hover();
 
                     i++;
 
                     if (i==30)
                     {
-                        state_m3 = 112;
+                        state_m3 = 1;
                         i = 0;
                     }
                 }
-                if (state_m3 == 112)
+                if (state_m3 == 1)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;
@@ -279,16 +274,16 @@ namespace iDroneExemplos
 
                     ProImg2.Deteccao_Circulo(img2, ImageFrame, 100);
 
-                    if ((ProImg2.Obj_centroid.X != -1) && (ProImg2.Obj_centroid.Y != -1))
-                    {
-                        state_m3 = 2;
-                        resetDroneTrajVal();
-                    }
-                    if ((ProImg.Obj_centroid.X == -1) && (ProImg.Obj_centroid.Y == -1))
-                    {
-                        state_m3 = 10;
-                        resetDroneTrajVal();
-                    }
+                    //if ((ProImg2.Obj_centroid.X != -1) && (ProImg2.Obj_centroid.Y != -1))
+                    //{
+                    //    state_m3 = 2;
+                    //    resetDroneTrajVal();
+                    //}
+                    //if ((ProImg.Obj_centroid.X == -1) && (ProImg.Obj_centroid.Y == -1))
+                    //{
+                    //    state_m3 = 10;
+                    //    resetDroneTrajVal();
+                    //}
                 }
                 if (state_m3 == 10)
                 {
@@ -333,40 +328,37 @@ namespace iDroneExemplos
                         mDrone.droneAterrar();
                     }
                 }//fim
-                #endregion
+                
             }
-            else if (mission == 1)
-            {
-
-            }
-
+            #endregion
 
 			//mostra imagens
 			pictureBox1.Image=Img.Bitmap;
 			pictureBox2.Image=img1.Bitmap;
-			
-            ////activa tipo de controlo seleccionado no drone
-            //if(checkBox5.Checked && checkBox2.Checked )
-            //    mDrone.droneMoverPRO(droneTraj.Vel_x_drone,0,droneTraj.Vel_z_drone,droneTraj.Vel_rot_z_drone);
-						
-            //if(checkBox5.Checked && checkBox3.Checked)
+
+            //activa tipo de controlo seleccionado no drone
+            //if (checkBox5.Checked && checkBox2.Checked)
+            //    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, 0, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
+
+            //if (checkBox5.Checked && checkBox3.Checked)
             //{
-            //    if( mDrone.droneObterAltitude()<2.0f)//sobe até à altura de 2 metros
-            //        mDrone.droneMoverPRO(droneTraj.Vel_x_drone,droneTraj.Vel_y_drone,0.25f,0);
+            //    if (mDrone.droneObterAltitude() < 2.0f)//sobe até à altura de 2 metros
+            //        mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0.25f, 0);
             //    else
-            //        mDrone.droneMoverPRO(droneTraj.Vel_x_drone,droneTraj.Vel_y_drone,0,0);
+            //        mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0, 0);
             //}
-			
-            //if(checkBox5.Checked && checkBox4.Checked){
-            //    if( mDrone.droneObterAltitude()<1.5f)//sobe até à altura de 1.5 metros
-            //        mDrone.droneMoverPRO(0,droneTraj.Vel_y_drone,0.25f,0);
+
+            //if (checkBox5.Checked && checkBox4.Checked)
+            //{
+            //    if (mDrone.droneObterAltitude() < 1.5f)//sobe até à altura de 1.5 metros
+            //        mDrone.droneMoverPRO(0, droneTraj.Vel_y_drone, 0.25f, 0);
             //    else
-            //        mDrone.droneMoverPRO(-0.02f,droneTraj.Vel_y_drone,0,0);
+            //        mDrone.droneMoverPRO(-0.02f, droneTraj.Vel_y_drone, 0, 0);
             //}
 			
 			//mostra na interface o estado de algumas variaveis do drone
-			EstadoDrone();
-						
+			
+            EstadoDrone();			
 		}
 		
 		void Segue_Objecto_CAM1(Image<Bgr, Byte> Img, int HUE_L, int HUE_H, int SAT_L, int SAT_H, int VAL_L, int VAL_H,bool HUE, bool SAT, bool VAL, bool INV, double area_obje_desej)
@@ -467,7 +459,7 @@ namespace iDroneExemplos
 		{
 			mDrone = new iDroneCup.Drone();
 			mDrone.droneLigar();
-           // mDrone.iDroneCup_ChangeWifiChannel(Convert.ToInt32(wifi_channel.Text));
+            mDrone.iDroneCup_ChangeWifiChannel(Convert.ToInt32(wifi_channel.Text));
 			mDrone.droneResetEmergencia();
 		}
 		
@@ -568,7 +560,7 @@ namespace iDroneExemplos
 
         void mission4_Click(object sender, EventArgs e)
         {
-            mDrone.droneCalibrar();
+            //mDrone.droneCalibrar();
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
             mDrone.iDroneCup_TakeOff();
             //mDrone.iDroneCup_Hover();
@@ -584,7 +576,7 @@ namespace iDroneExemplos
 
         void mission3_Click(object sender, System.EventArgs e)
         {
-            mDrone.droneCalibrar();
+            //mDrone.droneCalibrar();
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
             mDrone.iDroneCup_TakeOff();
             //mDrone.iDroneCup_Hover();

@@ -14,13 +14,13 @@ namespace iDroneExemplos
 {
     public partial class MainForm : Form
     {
-        const int m4_area_obj = 1;
-        const int m4_hsv_hlow = 0;
-        const int m4_hsv_hhi = 123;
-        const int m4_hsv_vlow = 109;
+        const int m4_area_obj = 7000;
+        const int m4_hsv_hlow = 20;
+        const int m4_hsv_hhi = 53;
+        const int m4_hsv_vlow = 169;
         const int m4_hsv_vhi = 255;
-        const int m4_hsv_slow = 79;
-        const int m4_hsv_shi = 166;
+        const int m4_hsv_slow = 123;
+        const int m4_hsv_shi = 229;
         const bool m4_hsv_h = true;
         const bool m4_hsv_s = true;
         const bool m4_hsv_v = true;

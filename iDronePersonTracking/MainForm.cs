@@ -87,9 +87,11 @@ namespace iDroneExemplos
 
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone); ;
+                    //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(0f, 0f, 0.5f, 0f); 
 
-                    if (mDrone.droneObterAltitude() > 3.0f)
+
+                    if (mDrone.droneObterAltitude() > 3.5f)
                     {
                         state_m4 = 1;
                         resetDroneTrajVal();
@@ -105,11 +107,11 @@ namespace iDroneExemplos
 
                     img1 = img1.SmoothGaussian(9);
 
-                    ProImg.Deteccao_Circulo(img1, ImageFrame, m4_area_obj);
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, (m4_area_obj));
 
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.1f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.10f, droneTraj.Vel_rot_z_drone);
 
                     if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
                     {
@@ -130,9 +132,9 @@ namespace iDroneExemplos
 
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.5f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.30f, droneTraj.Vel_rot_z_drone);
 
-                    if (mDrone.droneObterAltitude() < 1.0f)
+                    if (mDrone.droneObterAltitude() < 1.50f)
                     {
                         state_m4 = 3;
                         resetDroneTrajVal();
@@ -140,12 +142,33 @@ namespace iDroneExemplos
                 }
                 if (state_m4 == 3)
                 {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(ImageFrame, m4_hsv_hlow, m4_hsv_hhi, m4_hsv_slow, m4_hsv_shi, m4_hsv_vlow, m4_hsv_vhi, m4_hsv_h, m4_hsv_s, m4_hsv_v, m4_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, (m4_area_obj+6000));
+
+                    droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
+
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0, droneTraj.Vel_rot_z_drone);
+
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 3) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 3) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -3) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -3))
+                    {
+                        state_m4 = 4;
+                        resetDroneTrajVal();
+                    }
+                }
+                if (state_m4 == 4)
+                {
                     mDrone.droneAterrar();
                     resetDroneTrajVal();
                     state_m4 = 0;
                     mission = 0;
                 }
-            }
+            }//fim
             #endregion
 
             else if (mission == 2)
@@ -395,6 +418,7 @@ namespace iDroneExemplos
             mDrone.droneDescolar();
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
             mission = 4;
+            state_m4 = 0;
         }
 
         void mission2_Click(object sender, System.EventArgs e)
@@ -407,6 +431,8 @@ namespace iDroneExemplos
         {
             mDrone.droneDescolar();
             mission = 3;
+            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
+            state_m3 = 0;
         }
 
         void mission1_Click(object sender, System.EventArgs e)

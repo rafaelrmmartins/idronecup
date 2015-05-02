@@ -37,7 +37,8 @@ namespace iDroneExemplos
         int state_m3 = 0;
         int state_m2 = 0;
         int state_m1 = 0;
-        int mission = 0;
+        int mission = 0; 
+        int i = 0;
 		
 		public MainForm()
 		{
@@ -75,6 +76,18 @@ namespace iDroneExemplos
             if (mission == 4)
             {
                 if (state_m4 == 0)
+                {
+                    i++;
+
+                    mDrone.iDroneCup_Hover();
+
+                    if (i == 30)
+                    {
+                        state_m4 = 111;
+                        i = 0;
+                    }
+                }
+                if (state_m4 == 11)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;
@@ -182,7 +195,46 @@ namespace iDroneExemplos
             #region
             else if (mission == 3)
             {
-                if (state_m3 == 0)
+                if(state_m3 == 0)
+                {
+                    
+                    //if (mDrone.droneObterAltitude() < 1.5f)
+                    //    mDrone.droneMoverPRO(-0.1f, 0.1f, 0.15f, 0f);
+                    //else
+                    //    mDrone.droneMoverPRO(-0.1f, 0.1f, 0f, 0f);
+
+                    if (i!=0)
+                        mDrone.iDroneCup_Hover();
+
+                    i++;
+
+                    if (i==30)
+                    {
+                        state_m3 = 112;
+                        i = 0;
+                    }
+                }
+                if (state_m3 == 112)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, 0, 0, 0, 0, 0, 60, false, false, true, false);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+                                                                                              //TODO : testar efeito
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0.15f, droneTraj.Vel_rot_z_drone);
+
+                    if (mDrone.droneObterAltitude() > 1.5f)
+                    {
+                        state_m3 = 111;
+                        resetDroneTrajVal();
+                    }
+                }
+
+                if (state_m3 == 111)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;
@@ -196,7 +248,7 @@ namespace iDroneExemplos
                     ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
 
                     //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
-                    mDrone.droneMoverPRO(0.5f, 0f, 0f, 0f);
+                    mDrone.droneMoverPRO(0.1f, droneTraj.Vel_y_drone, 0f, 0f);
 
 
                     if (ProImg.Obj_centroid.X == -1 && ProImg.Obj_centroid.Y == -1)
@@ -215,7 +267,7 @@ namespace iDroneExemplos
 
                     droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
 
-                    mDrone.droneMoverPRO(0.25f, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(0.10f, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
 
                     //condiçao de final percurso
 
@@ -247,9 +299,9 @@ namespace iDroneExemplos
 
                     droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
 
-                    mDrone.droneMoverPRO(-0.25f, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(-0.15f, 0f, 0f, 0f);
 
-                    //condiçao de final percurso
+                    //condiçao de voltou ao percurso
 
                     if ((ProImg.Obj_centroid.X != -1) && (ProImg.Obj_centroid.Y != -1))
                     {
@@ -516,9 +568,10 @@ namespace iDroneExemplos
 
         void mission4_Click(object sender, EventArgs e)
         {
-            mDrone.droneDescolar();
-            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
             mDrone.droneCalibrar();
+            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
+            mDrone.iDroneCup_TakeOff();
+            //mDrone.iDroneCup_Hover();
             mission = 4;
             state_m4 = 0;
         }
@@ -531,9 +584,10 @@ namespace iDroneExemplos
 
         void mission3_Click(object sender, System.EventArgs e)
         {
-            mDrone.droneDescolar();
-            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
             mDrone.droneCalibrar();
+            mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
+            mDrone.iDroneCup_TakeOff();
+            //mDrone.iDroneCup_Hover();
             mission = 3;
             state_m3 = 0;
         }

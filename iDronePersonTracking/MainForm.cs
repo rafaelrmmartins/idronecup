@@ -275,6 +275,5 @@ namespace iDroneExemplos
 		
 		#endregion
 
-
 	}
 }

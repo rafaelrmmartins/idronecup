@@ -503,7 +503,7 @@ namespace iDroneExemplos
             this.Mission3.TabIndex = 27;
             this.Mission3.Text = "M3";
             this.Mission3.UseVisualStyleBackColor = false;
-            this.Mission3.Click += new System.EventHandler(this.Mission3);
+            this.Mission3.Click += new System.EventHandler(this.Mission3_Click);
             // 
             // Mission2
             // 

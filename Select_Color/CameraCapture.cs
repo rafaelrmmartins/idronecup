@@ -67,7 +67,11 @@ namespace Select_Color
 			
 			if (captureInProgress)
 			{
-				ImageFrame = capture.QueryFrame();
+                do
+                {
+                    ImageFrame = capture.QueryFrame();
+                } while (ImageFrame == null);
+
 				ImageFrame = ImageFrame.Resize(imageBox1.Width, imageBox1.Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
 				imageBox1.Image = ImageFrame;
 				

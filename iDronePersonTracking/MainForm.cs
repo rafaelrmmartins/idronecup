@@ -127,14 +127,14 @@ namespace iDroneExemplos
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
                     mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.10f, droneTraj.Vel_rot_z_drone);
-
-                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
+                                                                                                                                                                                                                                                           //TODO: try values that work
+                    if ((((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5)) || (mDrone.iDroneCup_Read_Altitude() < 1.7f))
                     {
-                        state_m4 = 2;
+                        state_m4 = 3;
                         resetDroneTrajVal();
                     }
                 }
-                if (state_m4 == 2)
+                if (state_m4 == 3)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;

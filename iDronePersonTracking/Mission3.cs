@@ -14,7 +14,7 @@ namespace iDroneExemplos
     public partial class MainForm : Form
     {
 
-        void Mission3_click(object sender, System.EventArgs e)
+        void Mission3_Click(object sender, System.EventArgs e)
         {
             mDrone.droneDescolar();
             mDrone.iDroneCup_Hover();

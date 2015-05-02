@@ -35,8 +35,8 @@ namespace iDroneExemplos
 		DroneTrajectoria droneTraj= new DroneTrajectoria();
         int state_m4 = 0;
         int state_m3 = 0;
-        int state_m2 = 0;
-        int state_m1 = 0;
+        //int state_m2 = 0;
+        //int state_m1 = 0;
         int mission = 0; 
         int i = 0;
 		
@@ -548,7 +548,6 @@ namespace iDroneExemplos
 		
 		#endregion
 
-
         const int m4_area_obj = 7000;
         const int m4_hsv_hlow = 4;
         const int m4_hsv_hhi = 168;
@@ -561,6 +560,7 @@ namespace iDroneExemplos
         const bool m4_hsv_v = true;
         const bool m4_hsv_invert = true;
 
+
         void mission4_Click(object sender, EventArgs e)
         {
             //mDrone.droneCalibrar();
@@ -571,20 +571,20 @@ namespace iDroneExemplos
             state_m4 = 0;
         }
 
-        void mission2_Click(object sender, System.EventArgs e)
-        {
-            mDrone.droneDescolar();
-            mission = 2;
-        }
-
         void mission3_Click(object sender, System.EventArgs e)
         {
             //mDrone.droneCalibrar();
             mDrone.droneMudarCamara(Drone.DroneCamera.INFERIOR);
-            mDrone.iDroneCup_TakeOff();
+            Button6Click(sender, e);
             //mDrone.iDroneCup_Hover();
-            mission = 3;
-            state_m3 = 0;
+            mission = 4;
+            state_m4 = 0;
+        }
+
+        void mission2_Click(object sender, System.EventArgs e)
+        {
+            mDrone.droneDescolar();
+            mission = 2;
         }
 
         void mission1_Click(object sender, System.EventArgs e)

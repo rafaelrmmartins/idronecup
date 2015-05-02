@@ -484,7 +484,7 @@ namespace iDroneExemplos
             this.Mission1.TabIndex = 26;
             this.Mission1.Text = "M1";
             this.Mission1.UseVisualStyleBackColor = true;
-            this.Mission1.Click += new System.EventHandler(this.Mission1_Click);
+            this.Mission1.Click += new System.EventHandler(this.mission1_Click);
             // 
             // wifi_channel
             // 
@@ -503,7 +503,7 @@ namespace iDroneExemplos
             this.Mission3.TabIndex = 27;
             this.Mission3.Text = "M3";
             this.Mission3.UseVisualStyleBackColor = false;
-            this.Mission3.Click += new System.EventHandler(this.Mission3_Click);
+            this.Mission3.Click += new System.EventHandler(this.mission3_Click);
             // 
             // Mission2
             // 
@@ -513,7 +513,7 @@ namespace iDroneExemplos
             this.Mission2.TabIndex = 28;
             this.Mission2.Text = "M2";
             this.Mission2.UseVisualStyleBackColor = true;
-            this.Mission2.Click += new System.EventHandler(this.Mission2_Click);
+            this.Mission2.Click += new System.EventHandler(this.mission2_Click);
             // 
             // MainForm
             // 
@@ -554,6 +554,8 @@ namespace iDroneExemplos
             this.PerformLayout();
 
 		}
+
+       
 		private System.Windows.Forms.CheckBox checkBox7;
 		private System.Windows.Forms.CheckBox checkBox6;
 		private System.Windows.Forms.TextBox H_Hval;

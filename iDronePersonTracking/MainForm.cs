@@ -77,12 +77,12 @@ namespace iDroneExemplos
             {
                 if (state_m4 == 0)
                 {
-                    if (i > 15)
+                    if (i > 25)
                         mDrone.iDroneCup_Hover();
 
                     i++;
 
-                    if (i == 30)
+                    if (i == 50)
                     {
                         state_m4 = 1;
                         i = 0;
@@ -103,8 +103,8 @@ namespace iDroneExemplos
 
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
-                    //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
-                    mDrone.droneMoverPRO(0f, 0f, 1f, 0f); 
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1f, droneTraj.Vel_rot_z_drone);
+                    //mDrone.droneMoverPRO(0f, 0f, 1f, 0f); 
 
 
                     if (mDrone.droneObterAltitude() > 3.1f)
@@ -126,7 +126,7 @@ namespace iDroneExemplos
 
                     droneTraj.ObjectTracking2(ProImg.Obj_centroid, imgsize);
 
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.10f, droneTraj.Vel_rot_z_drone);
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, -0.15f, droneTraj.Vel_rot_z_drone);
                                                                                                                                                                                                                                                            //TODO: try values that work
                     if ((((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5)) || (mDrone.iDroneCup_Read_Altitude() < 1.7f))
                     {
@@ -152,7 +152,7 @@ namespace iDroneExemplos
                     else if (mDrone.iDroneCup_Read_Altitude() < 1.7f)
                         mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0, droneTraj.Vel_rot_z_drone);
 
-                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 2) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 2) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -2) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -2))
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 4) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 4) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -4) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -4))
                     {
                         state_m4 = 4;
                         resetDroneTrajVal();
@@ -462,7 +462,7 @@ namespace iDroneExemplos
 		{
 			mDrone = new iDroneCup.Drone();
 			mDrone.droneLigar();
-            mDrone.iDroneCup_ChangeWifiChannel(Convert.ToInt32(wifi_channel.Text));
+            //mDrone.iDroneCup_ChangeWifiChannel(Convert.ToInt32(wifi_channel.Text));
 			mDrone.droneResetEmergencia();
 		}
 		
@@ -560,6 +560,7 @@ namespace iDroneExemplos
         const bool m4_hsv_v = true;
         const bool m4_hsv_invert = true;
 
+        //teste
 
         void mission4_Click(object sender, EventArgs e)
         {

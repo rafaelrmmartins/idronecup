@@ -204,8 +204,8 @@ namespace iDroneExemplos
 		{
 				float deltaX;
 				float deltaY;
-				float k1=0.07f; //TODO: keep an eye..
-				float k2=0.07f; //TODO: keep an eye..
+				float k1=0.05f; //TODO: keep an eye..
+				float k2=0.05f; //TODO: keep an eye..
 							
 				deltaX=centroid.X-imgsize.X/2;
 				deltaY=centroid.Y-imgsize.Y/2;

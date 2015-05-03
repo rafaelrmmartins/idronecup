@@ -79,6 +79,7 @@ namespace iDroneExemplos
             this.wifi_channel = new System.Windows.Forms.TextBox();
             this.Mission3 = new System.Windows.Forms.Button();
             this.Mission2 = new System.Windows.Forms.Button();
+            this.calibrar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -333,7 +334,7 @@ namespace iDroneExemplos
             // 
             this.pictureBox4.Location = new System.Drawing.Point(635, 448);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(180, 200);
+            this.pictureBox4.Size = new System.Drawing.Size(180, 300);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox4.TabIndex = 24;
             this.pictureBox4.TabStop = false;
@@ -515,11 +516,22 @@ namespace iDroneExemplos
             this.Mission2.UseVisualStyleBackColor = true;
             this.Mission2.Click += new System.EventHandler(this.mission2_Click);
             // 
+            // calibrar
+            // 
+            this.calibrar.Location = new System.Drawing.Point(537, 534);
+            this.calibrar.Name = "calibrar";
+            this.calibrar.Size = new System.Drawing.Size(84, 26);
+            this.calibrar.TabIndex = 29;
+            this.calibrar.Text = "Calibrar";
+            this.calibrar.UseVisualStyleBackColor = true;
+            this.calibrar.Click += new System.EventHandler(this.calibrar_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1020, 655);
+            this.ClientSize = new System.Drawing.Size(1020, 750);
+            this.Controls.Add(this.calibrar);
             this.Controls.Add(this.Mission2);
             this.Controls.Add(this.Mission3);
             this.Controls.Add(this.wifi_channel);
@@ -563,7 +575,7 @@ namespace iDroneExemplos
 		private System.Windows.Forms.TextBox V_Hval;
 		private System.Windows.Forms.TextBox Area;
 		private System.Windows.Forms.Label label_area;
-		private System.Windows.Forms.CheckBox H;
+        private System.Windows.Forms.CheckBox H;
 		private System.Windows.Forms.CheckBox S;
 		private System.Windows.Forms.CheckBox V;
 		private System.Windows.Forms.CheckBox Invert;
@@ -598,6 +610,7 @@ namespace iDroneExemplos
         private System.Windows.Forms.TextBox wifi_channel;
         private System.Windows.Forms.Button Mission3;
         private System.Windows.Forms.Button Mission2;
+        private System.Windows.Forms.Button calibrar;
 		
 		
 	}

@@ -58,18 +58,21 @@ namespace iDroneExemplos
 
 		void Processamento(Image<Bgr, Byte> Img)
 		{
+
+
+
 			//determina parametros de controlo, por processamento de imagem, para o tipo de controlo: Segue Objecto que utiliza a câmara 1(frente do drone) 
-			if(checkBox2.Checked)
-				Segue_Objecto_CAM1(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked, Convert.ToDouble(Area.Text));
+            //if(checkBox2.Checked)
+            //    Segue_Objecto_CAM1(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked, Convert.ToDouble(Area.Text));
 			
-			if(checkBox3.Checked)
-				Segue_Objecto_CAM2(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked);
+            //if(checkBox3.Checked)
+            //    Segue_Objecto_CAM2(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked);
 			
-			if(checkBox4.Checked)
-				Centra_Linha_CAM2(Img);
+            //if(checkBox4.Checked)
+            //    Centra_Linha_CAM2(Img);
 			
-			if(checkBox6.Checked)
-				Centra_Circulo_CAM1(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked, Convert.ToDouble(Area.Text));
+            //if(checkBox6.Checked)
+            //    Centra_Circulo_CAM1(Img,Convert.ToInt32(H_Lval.Text),Convert.ToInt32(H_Hval.Text),Convert.ToInt32(S_Lval.Text),Convert.ToInt32(S_Hval.Text),Convert.ToInt32(V_Lval.Text),Convert.ToInt32(V_Hval.Text), H.Checked, S.Checked, V.Checked,Invert.Checked, Convert.ToDouble(Area.Text));
 
             //mission 4
             #region
@@ -341,48 +344,234 @@ namespace iDroneExemplos
             {
                 if (state_m1 == 0)
                 {
+                    if (i > 50)
+                    {
+                        mDrone.dronePairar();
+                    }
+                    
                     i++;
 
-                    if (i > 50)
-                    { 
-                        mDrone.droneDescolar();
+                    if (i > 100)
+                    {
+                        resetDroneTrajVal();
                         i = 0;
                         state_m1 = 1;
                     }
                 }
-                if (state_m1 == 1)
+                else if (state_m1 == 1)
                 {
-                    mDrone.droneSubir(0.75f);
+                    mDrone.droneMoverPRO(0f, 0f, 0.10f, 0f);
 
-                    if (mDrone.droneObterAltitude() >1.30f)
+                    if (mDrone.droneObterAltitude() > 1.2f)
                     {
-                        state_m1 = 2;
+                        state_m2 = 2;
+                        resetDroneTrajVal();
                     }
                 }
-
-                if (state_m1 == 2)
+                else if (state_m1 == 2)
                 {
                     imgsize.X = ImageFrame.Width;
                     imgsize.Y = ImageFrame.Height;
 
-                    img1 = ProImg.HsvROI(Img, 0, 0, 0, 0, 0, 60, false, false, true, false);
+                    img1 = ProImg.HsvROI(Img, m11_hsv_hlow, m11_hsv_hhi, m11_hsv_slow, m11_hsv_shi, m11_hsv_vlow, m11_hsv_vhi, m11_hsv_h, m11_hsv_s, m11_hsv_v, m11_hsv_invert);
 
                     img1 = img1.SmoothGaussian(9);
 
-                    // TODO: select area parameter for mission 4 : function of height?
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
+
+                    mDrone.droneMoverPRO(0f, (droneTraj.Vel_rot_z_drone * 0.5f), droneTraj.Vel_z_drone, 0f);
+
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
+                    {
+                        resetDroneTrajVal();
+                        state_m1 = 22;
+                        i = 0;
+                    }
+                }
+                else if (state_m1 == 22)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, m11_hsv_hlow, m11_hsv_hhi, m11_hsv_slow, m11_hsv_shi, m11_hsv_vlow, m11_hsv_vhi, m11_hsv_h, m11_hsv_s, m11_hsv_v, m11_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
 
                     ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
 
-                    //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
-                    mDrone.droneMoverPRO(0.1f, droneTraj.Vel_y_drone, 0f, 0f);
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
 
+                    mDrone.droneMoverPRO(0.15f, 0f, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
 
                     if (ProImg.Obj_centroid.X == -1 && ProImg.Obj_centroid.Y == -1)
                     {
-                        state_m3 = 1;
+                        resetDroneTrajVal();
+                        state_m1 = 3;
+                        i = 0;
+                    }
+                }
+                else if (state_m1 == 3)
+                {
+                    mDrone.droneMoverPRO(0.25f, 0f, 0f, 0f);
+
+                    i++;
+
+                    if (i == 25)
+                    {
+                        state_m1 = 4;
+                        i = 0;
                         resetDroneTrajVal();
                     }
+                }
+                else if (state_m1 == 4)
+                {
+                    mDrone.droneMoverPRO(0f, 0.15f, 0f, 0f);
 
+                    i++;
+
+                    if (i == 25)
+                    {
+                        state_m1 = 5;
+                        i = 0;
+                        resetDroneTrajVal();
+                    }
+                }
+                else if (state_m1 == 5)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, m12_hsv_hlow, m12_hsv_hhi, m12_hsv_slow, m12_hsv_shi, m12_hsv_vlow, m12_hsv_vhi, m12_hsv_h, m12_hsv_s, m12_hsv_v, m12_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
+
+                    mDrone.droneMoverPRO(0f, (droneTraj.Vel_rot_z_drone * 0.5f), droneTraj.Vel_z_drone, 0f);
+
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
+                    {
+                        resetDroneTrajVal();
+                        state_m1 = 6;
+                        i = 0;
+                    }
+                }
+                else if (state_m1 == 6)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, m12_hsv_hlow, m12_hsv_hhi, m12_hsv_slow, m12_hsv_shi, m12_hsv_vlow, m12_hsv_vhi, m12_hsv_h, m12_hsv_s, m12_hsv_v, m12_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
+
+                    mDrone.droneMoverPRO(0.15f, 0f, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
+
+                    if (ProImg.Obj_centroid.X == -1 && ProImg.Obj_centroid.Y == -1)
+                    {
+                        resetDroneTrajVal();
+                        state_m1 = 7;
+                        i = 0;
+                    }
+                }
+                else if (state_m1 == 7)
+                {
+                    mDrone.droneMoverPRO(0.25f, 0f, 0f, 0f);
+
+                    i++;
+
+                    if (i == 25)
+                    {
+                        state_m1 = 8;
+                        i = 0;
+                        resetDroneTrajVal();
+                    }
+                }
+                else if (state_m1 == 8)
+                {
+                    mDrone.droneMoverPRO(0f, 0f, 0.10f, 0f);
+
+                    i++;
+
+                    if (i == 25)
+                    {
+                        state_m1 = 9;
+                        i = 0;
+                        resetDroneTrajVal();
+                    }
+                }
+                else if (state_m1 == 9)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, m13_hsv_hlow, m13_hsv_hhi, m13_hsv_slow, m13_hsv_shi, m13_hsv_vlow, m13_hsv_vhi, m13_hsv_h, m13_hsv_s, m13_hsv_v, m13_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
+
+                    mDrone.droneMoverPRO(0f, (droneTraj.Vel_rot_z_drone * 0.5f), droneTraj.Vel_z_drone, 0f);
+
+                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
+                    {
+                        resetDroneTrajVal();
+                        state_m1 = 10;
+                        i = 0;
+                    }
+                }
+                else if (state_m1 == 10)
+                {
+                    imgsize.X = ImageFrame.Width;
+                    imgsize.Y = ImageFrame.Height;
+
+                    img1 = ProImg.HsvROI(Img, m13_hsv_hlow, m13_hsv_hhi, m13_hsv_slow, m13_hsv_shi, m13_hsv_vlow, m13_hsv_vhi, m13_hsv_h, m13_hsv_s, m13_hsv_v, m13_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
+
+                    mDrone.droneMoverPRO(0.15f, 0f, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
+
+                    if (ProImg.Obj_centroid.X == -1 && ProImg.Obj_centroid.Y == -1)
+                    {
+                        resetDroneTrajVal();
+                        state_m1 = 11;
+                        i = 0;
+                    }
+                }
+                else if (state_m1 == 11)
+                {
+                    mDrone.droneMoverPRO(0.25f, 0f, 0f, 0f);
+
+                    i++;
+
+                    if (i == 25)
+                    {
+                        state_m1 = 12;
+                        i = 0;
+                        resetDroneTrajVal();
+                    }
+                }
+                else if (state_m1 == 12)
+                {
+                    mDrone.iDroneCup_Land();
+
+                    state_m1 = 0;
+                    i = 0;
+                    resetDroneTrajVal();
                 }
                 //fim
             }
@@ -394,43 +583,71 @@ namespace iDroneExemplos
             {
                 if (state_m2 == 0)
                 {
-                    i++;
-
-                    if (i > 90)
+                    if (i > 50)
+                    {
                         mDrone.dronePairar();
+                    }
 
-                    if (i > 150)
+                    if (i == 100)
+                        m2_inic_yaw = normalize(mDrone.droneObterYaw()+3.141f);
+
+                    if (i > 100)
                         mDrone.droneRodarDireita(0.5f);
 
-                    if(mDrone.droneObterYaw() > 180)
+                    i++;
+
+
+                    if (Math.Abs(m2_inic_yaw - normalize(mDrone.droneObterYaw())) < 0.1f )
                     {
                         resetDroneTrajVal();
+                        i = 0;
+                        state_m2 = 11;
+                    }
+                }
+                else if (state_m2 == 11)
+                {
+                    mDrone.dronePairar();
+
+                    i++;
+
+                    if(i>50)
+                    { 
                         i = 0;
                         state_m2 = 1;
                     }
                 }
                 else if (state_m2 == 1)
                 {
-                    imgsize.X = Img.Width;
-                    imgsize.Y = Img.Height;
+                    mDrone.droneMoverPRO(0f, 0f, 0.1f, 0f);
 
-                    img1 = ProImg.HsvROI(Img, m2_hsv_hlow, m2_hsv_hhi, m2_hsv_slow, m2_hsv_shi, m2_hsv_vlow, m2_hsv_vhi, m2_hsv_h, SAT, VAL, INV);
-
-                    img1 = img1.SmoothGaussian(9);
-
-                    ProImg.Deteccao_Circulo(img1, Img, m2_area_obj);
-
-                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
-
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, 0f, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
-
-                    if (mDrone.droneObterAltitude() < 1.0f)
+                    if (mDrone.droneObterAltitude() > 1.1f)
                     {
                         state_m2 = 2;
                         resetDroneTrajVal();
                     }
                 }
                 else if (state_m2 == 2)
+                {
+                    imgsize.X = Img.Width;
+                    imgsize.Y = Img.Height;
+
+                    img1 = ProImg.HsvROI(Img, m2_hsv_hlow, m2_hsv_hhi, m2_hsv_slow, m2_hsv_shi, m2_hsv_vlow, m2_hsv_vhi, m2_hsv_h, m2_hsv_s, m2_hsv_v, m2_hsv_invert);
+
+                    img1 = img1.SmoothGaussian(9);
+
+                    ProImg.Deteccao_Circulo(img1, Img, m2_area_obj);
+
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_ref);
+
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, 0f, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
+
+                    if (mDrone.droneObterAltitude() < 0.60f)
+                    {
+                        state_m2 = 3;
+                        resetDroneTrajVal();
+                    }
+                }
+                else if (state_m2 == 3)
                 {
                     mDrone.droneAterrar();
                     state_m2 = 0;
@@ -524,7 +741,7 @@ namespace iDroneExemplos
 
 		void EstadoDrone()
 		{					
-			Image<Bgr, Byte> imgdata = new Image<Bgr, byte>(180, 200, new Bgr(0, 0, 0));
+			Image<Bgr, Byte> imgdata = new Image<Bgr, byte>(180, 300, new Bgr(0, 0, 0));
 			
 			MCvFont f = new MCvFont(FONT.CV_FONT_HERSHEY_COMPLEX, 0.4, 0.4);
 			string s = "Bateria: " + mDrone.droneObterValorBateria().ToString()+"%";
@@ -556,6 +773,13 @@ namespace iDroneExemplos
 			
 			s = "Area Objecto: " + ProImg.Obj_area_actual.ToString();
 			imgdata.Draw(s, ref f, new Point(5, 190), new Bgr(255, 255, 0));
+
+            s = "Stage M1: " + state_m1.ToString();
+            imgdata.Draw(s, ref f, new Point(5, 210), new Bgr(255, 255, 0));
+
+            s = "Stage M2: " + state_m2.ToString() + "     i: " + i.ToString();
+            imgdata.Draw(s, ref f, new Point(5, 230), new Bgr(255, 255, 0));
+
 			
 			pictureBox4.Image = imgdata.Bitmap;
 		}
@@ -673,17 +897,30 @@ namespace iDroneExemplos
             state_m3 = 0;
         }
 
+        float m2_inic_yaw;
+
+        float normalize(float value)
+        {
+            float twoPi = (float)(Math.PI) + (float)(Math.PI);
+            while (value <= -Math.PI) value += twoPi;
+            while (value > Math.PI) value -= twoPi;
+
+            return value;
+        }  
+
         void mission2_Click(object sender, System.EventArgs e)
         {
             mDrone.droneMudarCamara(Drone.DroneCamera.FRONTAL);
             mDrone.droneDescolar();
             mission = 2;
+            i = 0;
             state_m2 = 0;
         }
 
         void mission1_Click(object sender, System.EventArgs e)
         {
-            mDrone.droneCalibrar();
+            mDrone.droneMudarCamara(Drone.DroneCamera.FRONTAL);
+            mDrone.droneDescolar();
             mission = 1;
             state_m1 = 0;
             i = 0;
@@ -749,17 +986,24 @@ namespace iDroneExemplos
         const bool m13_hsv_v = true;
         const bool m13_hsv_invert = true;
 
-        const int m2_area_obj = 7000;
-        const int m2_hsv_hlow = 46;
-        const int m2_hsv_hhi = 89;
-        const int m2_hsv_vlow = 142;
-        const int m2_hsv_vhi = 255;
-        const int m2_hsv_slow = 0;
-        const int m2_hsv_shi = 136;
+
+        const int m2_area_ref = 20000;
+        const int m2_area_obj = 4000;
+        const int m2_hsv_hlow = 56;
+        const int m2_hsv_hhi = 93;
+        const int m2_hsv_vlow = 109;
+        const int m2_hsv_vhi = 202;
+        const int m2_hsv_slow = 63;
+        const int m2_hsv_shi = 255;
         const bool m2_hsv_h = true;
         const bool m2_hsv_s = true;
-        const bool m2_hsv_v = true;
+        const bool m2_hsv_v = false;
         const bool m2_hsv_invert = false;
+
+        private void calibrar_Click(object sender, EventArgs e)
+        {
+            mDrone.iDroneCup_Calibration();
+        }
         
     }
 }

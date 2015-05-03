@@ -335,7 +335,7 @@ namespace iDroneExemplos
             }
             #endregion
 
-            //mision1
+            //mission1
             #region
             else if (mission == 1)
             {
@@ -384,82 +384,59 @@ namespace iDroneExemplos
                     }
 
                 }
-                if (state_m3 == 1)
+                //fim
+            }
+            #endregion
+
+            //mission2
+            #region
+            else if (mission == 2)
+            {
+                if (state_m2 == 0)
                 {
-                    imgsize.X = ImageFrame.Width;
-                    imgsize.Y = ImageFrame.Height;
+                    i++;
 
-                    img1 = ProImg.Deteccao_Linha(ImageFrame);
+                    if (i > 90)
+                        mDrone.dronePairar();
 
-                    droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
+                    if (i > 150)
+                        mDrone.droneRodarDireita(0.5f);
 
-                    mDrone.droneMoverPRO(0.10f, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
-
-                    //condiçao de final percurso
-
-                    img2 = ProImg2.HsvROI(ImageFrame, 0, 0, 0, 0, 0, 66, false, false, true, false);
-
-                    img2 = img2.SmoothGaussian(9);
-
-                    // TODO: select area parameter for mission 4 : function of height?
-
-                    ProImg2.Deteccao_Circulo(img2, ImageFrame, 100);
-
-                    //if ((ProImg2.Obj_centroid.X != -1) && (ProImg2.Obj_centroid.Y != -1))
-                    //{
-                    //    state_m3 = 2;
-                    //    resetDroneTrajVal();
-                    //}
-                    //if ((ProImg.Obj_centroid.X == -1) && (ProImg.Obj_centroid.Y == -1))
-                    //{
-                    //    state_m3 = 10;
-                    //    resetDroneTrajVal();
-                    //}
-                }
-                if (state_m3 == 10)
-                {
-                    imgsize.X = ImageFrame.Width;
-                    imgsize.Y = ImageFrame.Height;
-
-                    img1 = ProImg.Deteccao_Linha(ImageFrame);
-
-                    droneTraj.ObjectTracking3(ProImg.Obj_centroid, imgsize);
-
-                    mDrone.droneMoverPRO(-0.15f, 0f, 0f, 0f);
-
-                    //condiçao de voltou ao percurso
-
-                    if ((ProImg.Obj_centroid.X != -1) && (ProImg.Obj_centroid.Y != -1))
+                    if(mDrone.droneObterYaw() > 180)
                     {
-                        state_m3 = 1;
                         resetDroneTrajVal();
+                        i = 0;
+                        state_m2 = 1;
                     }
                 }
-                if (state_m3 == 2)
+                else if (state_m2 == 1)
                 {
-                    imgsize.X = ImageFrame.Width;
-                    imgsize.Y = ImageFrame.Height;
+                    imgsize.X = Img.Width;
+                    imgsize.Y = Img.Height;
 
-                    img1 = ProImg.HsvROI(Img, 0, 0, 0, 0, 0, 60, false, false, true, false);
+                    img1 = ProImg.HsvROI(Img, m2_hsv_hlow, m2_hsv_hhi, m2_hsv_slow, m2_hsv_shi, m2_hsv_vlow, m2_hsv_vhi, m2_hsv_h, SAT, VAL, INV);
 
                     img1 = img1.SmoothGaussian(9);
 
-                    // TODO: select area parameter for mission 4 : function of height?
-                    //TODO: aterragem!!!!
-                    ProImg.Deteccao_Circulo(img1, ImageFrame, 100);
+                    ProImg.Deteccao_Circulo(img1, Img, m2_area_obj);
 
-                    //mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 1.0f, droneTraj.Vel_rot_z_drone);
-                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, droneTraj.Vel_y_drone, 0f, droneTraj.Vel_rot_z_drone);
+                    droneTraj.ObjectTracking1(ProImg.Obj_centroid, imgsize, ProImg.Obj_area_actual, m2_area_obj);
 
-                    if (((ProImg.Obj_centroid.X - (imgsize.X / 2)) < 5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) < 5) && ((ProImg.Obj_centroid.X - (imgsize.X / 2)) > -5) && ((ProImg.Obj_centroid.Y - (imgsize.Y / 2)) > -5))
+                    mDrone.droneMoverPRO(droneTraj.Vel_x_drone, 0f, droneTraj.Vel_z_drone, droneTraj.Vel_rot_z_drone);
+
+                    if (mDrone.droneObterAltitude() < 1.0f)
                     {
-                        state_m3 = 0;
-                        mission = 0;
+                        state_m2 = 2;
                         resetDroneTrajVal();
-                        mDrone.droneAterrar();
                     }
-                }//fim
-            }
+                }
+                else if (state_m2 == 2)
+                {
+                    mDrone.droneAterrar();
+                    state_m2 = 0;
+                    mission = 0;
+                }
+            } //fim
             #endregion
 
             //mostra imagens
@@ -676,20 +653,6 @@ namespace iDroneExemplos
 		
 		#endregion
 
-        const int m4_area_obj = 7000;
-        const int m4_hsv_hlow = 4;
-        const int m4_hsv_hhi = 168;
-        const int m4_hsv_vlow = 89;
-        const int m4_hsv_vhi = 255;
-        const int m4_hsv_slow = 132;
-        const int m4_hsv_shi = 255;
-        const bool m4_hsv_h = true;
-        const bool m4_hsv_s = true;
-        const bool m4_hsv_v = true;
-        const bool m4_hsv_invert = true;
-
-        //teste
-
         void mission4_Click(object sender, EventArgs e)
         {
             //mDrone.droneCalibrar();
@@ -738,5 +701,65 @@ namespace iDroneExemplos
             return;
         }
 
+        const int m4_area_obj = 7000;
+        const int m4_hsv_hlow = 4;
+        const int m4_hsv_hhi = 168;
+        const int m4_hsv_vlow = 89;
+        const int m4_hsv_vhi = 255;
+        const int m4_hsv_slow = 132;
+        const int m4_hsv_shi = 255;
+        const bool m4_hsv_h = true;
+        const bool m4_hsv_s = true;
+        const bool m4_hsv_v = true;
+        const bool m4_hsv_invert = true;
+
+        const int m11_area_obj = 7000;
+        const int m11_hsv_hlow = 4;
+        const int m11_hsv_hhi = 168;
+        const int m11_hsv_vlow = 89;
+        const int m11_hsv_vhi = 255;
+        const int m11_hsv_slow = 132;
+        const int m11_hsv_shi = 255;
+        const bool m11_hsv_h = true;
+        const bool m11_hsv_s = true;
+        const bool m11_hsv_v = true;
+        const bool m11_hsv_invert = true;
+
+        const int m12_area_obj = 7000;
+        const int m12_hsv_hlow = 4;
+        const int m12_hsv_hhi = 168;
+        const int m12_hsv_vlow = 89;
+        const int m12_hsv_vhi = 255;
+        const int m12_hsv_slow = 132;
+        const int m12_hsv_shi = 255;
+        const bool m12_hsv_h = true;
+        const bool m12_hsv_s = true;
+        const bool m12_hsv_v = true;
+        const bool m12_hsv_invert = true;
+
+        const int m13_area_obj = 7000;
+        const int m13_hsv_hlow = 4;
+        const int m13_hsv_hhi = 168;
+        const int m13_hsv_vlow = 89;
+        const int m13_hsv_vhi = 255;
+        const int m13_hsv_slow = 132;
+        const int m13_hsv_shi = 255;
+        const bool m13_hsv_h = true;
+        const bool m13_hsv_s = true;
+        const bool m13_hsv_v = true;
+        const bool m13_hsv_invert = true;
+
+        const int m2_area_obj = 7000;
+        const int m2_hsv_hlow = 46;
+        const int m2_hsv_hhi = 89;
+        const int m2_hsv_vlow = 142;
+        const int m2_hsv_vhi = 255;
+        const int m2_hsv_slow = 0;
+        const int m2_hsv_shi = 136;
+        const bool m2_hsv_h = true;
+        const bool m2_hsv_s = true;
+        const bool m2_hsv_v = true;
+        const bool m2_hsv_invert = false;
+        
     }
 }
